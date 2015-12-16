@@ -1,6 +1,4 @@
-{-# OPTIONS_GHC -Wall #-}
-
-module Hanoi where
+module CIS194.Week01.Hanoi where
 
 -- Exercise 05
 type Peg = String

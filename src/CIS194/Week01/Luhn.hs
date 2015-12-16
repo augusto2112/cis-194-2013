@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Luhn where
+module CIS194.Week01.Luhn where
 
 -- Exercise 01
 toDigits :: Int -> [Int]
@@ -13,8 +13,9 @@ toDigitsRev n
 
 -- Exercise 02
 doubleEveryOther :: [Int] -> [Int]
-doubleEveryOther (x:y:xs) = x : 2*y : doubleEveryOther xs
-doubleEveryOther xs       = xs
+doubleEveryOther []       = []
+doubleEveryOther (x:[])   = []
+doubleEveryOther (x:y:xs) = x*2 : y : doubleEveryOther xs
 
 -- Exercise 03
 sumDigits :: [Int] -> Int
@@ -22,4 +23,4 @@ sumDigits = sum . map (sum . toDigits)
 
 -- Exercise 04
 validate :: Int -> Bool
-validate n = mod (sumDigits . doubleEveryOther . toDigitsRev $ n) 10 == 0
+validate n = mod (sumDigits . doubleEveryOther . toDigits $ n) 10 == 0

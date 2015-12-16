@@ -1,10 +1,10 @@
-module HanoiSpec where
+module CIS194.Week01.HanoiSpec where
 
-import Hanoi
+import CIS194.Week01.Hanoi
 import Test.Hspec
 
 spec :: Spec
 spec =
   describe "hanoi" $
-    it "..." $
+    it "computes solution for hanoi" $
       hanoi 2 "a" "b" "c" `shouldBe` [("a","c"), ("a","b"), ("c","b")]
