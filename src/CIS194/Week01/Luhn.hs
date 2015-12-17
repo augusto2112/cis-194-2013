@@ -14,7 +14,7 @@ toDigitsRev n
 -- Exercise 02
 doubleEveryOther :: [Int] -> [Int]
 doubleEveryOther []       = []
-doubleEveryOther (x:[])   = []
+doubleEveryOther (x:[])   = [x]
 doubleEveryOther (x:y:xs) = x*2 : y : doubleEveryOther xs
 
 -- Exercise 03
