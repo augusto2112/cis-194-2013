@@ -22,3 +22,34 @@ spec = do
       [ LogMessage Info 4 "Everything normal"
       , LogMessage Warning 5 "Flange is due for a check-up"
       ]
+
+  describe "insert" $ do
+    context "when the LogMessage is Unknown" $ do
+      context "and the target is a Leaf" $
+        it "do not change the MessageTree" $
+          insert (Unknown "") Leaf `shouldBe` Leaf
+      context "and the target is a Node" $
+        it "do not change the MessageTree" $
+          insert (Unknown "") (messageTree 10) `shouldBe` (messageTree 10)
+
+    context "when the target is a Leaf" $
+      it "inserts the given LogMessage into the MessageTree" $
+        insert (logMessage 10) Leaf `shouldBe` (messageTree 10)
+
+    context "when the log message has a timestamp smaller or equal than root" $
+      it "inserts the given LogMessage to the left" $ do
+        insert (logMessage 1)  (messageTree 10) `shouldBe` Node (messageTree 1)  (logMessage 10) Leaf
+        insert (logMessage 10) (messageTree 10) `shouldBe` Node (messageTree 10) (logMessage 10) Leaf
+
+    context "when the log message has a timestamp greater than root" $
+      it "inserts the given LogMessage to the right" $
+        insert (logMessage 10) (messageTree 1) `shouldBe` Node Leaf (logMessage 1) (messageTree 10)
+
+-- Helper functions
+logMessage :: TimeStamp -> LogMessage
+logMessage ts = LogMessage Info ts ""
+logMessage ts = LogMessage Info ts ""
+
+messageTree :: TimeStamp -> MessageTree
+messageTree ts = Node Leaf (logMessage ts) Leaf
+
