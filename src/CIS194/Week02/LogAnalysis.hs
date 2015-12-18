@@ -33,3 +33,7 @@ timestamp :: LogMessage -> TimeStamp
 timestamp (LogMessage Info timestamp _)      = timestamp
 timestamp (LogMessage Warning timestamp _)   = timestamp
 timestamp (LogMessage (Error _) timestamp _) = timestamp
+
+-- Exercise 03
+build :: [LogMessage] -> MessageTree
+build = foldl (flip insert) Leaf

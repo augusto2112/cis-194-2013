@@ -45,6 +45,10 @@ spec = do
       it "inserts the given LogMessage to the right" $
         insert (logMessage 10) (messageTree 1) `shouldBe` Node Leaf (logMessage 1) (messageTree 10)
 
+  describe "build" $ do
+    it "builds up a MessageTree from a list of log messages" $
+      build [ logMessage 1, logMessage 10 ] `shouldBe` Node Leaf (LogMessage Info 1 "") (Node Leaf (LogMessage Info 10 "") Leaf)
+
 -- Helper functions
 logMessage :: TimeStamp -> LogMessage
 logMessage ts = LogMessage Info ts ""
