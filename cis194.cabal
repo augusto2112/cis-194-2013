@@ -16,6 +16,8 @@ library
   hs-source-dirs:      src
   exposed-modules:     CIS194.Week01.Luhn
                        CIS194.Week01.Hanoi
+                       CIS194.Week02.LogAnalysis
+                       CIS194.Week02.Log
   build-depends:       base >= 4.7 && < 5
   default-language:    Haskell2010
 
