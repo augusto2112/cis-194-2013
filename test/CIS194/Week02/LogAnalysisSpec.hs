@@ -49,6 +49,10 @@ spec = do
     it "builds up a MessageTree from a list of log messages" $
       build [ logMessage 1, logMessage 10 ] `shouldBe` Node Leaf (LogMessage Info 1 "") (Node Leaf (LogMessage Info 10 "") Leaf)
 
+  describe "inOrder" $ do
+    it "sorts log messages by timestamp" $
+      inOrder (Node (messageTree 1) (logMessage 2) (messageTree 3)) `shouldBe` [ (logMessage 1), (logMessage 2), (logMessage 3)]
+
 -- Helper functions
 logMessage :: TimeStamp -> LogMessage
 logMessage ts = LogMessage Info ts ""

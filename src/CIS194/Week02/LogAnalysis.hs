@@ -37,3 +37,8 @@ timestamp (LogMessage (Error _) timestamp _) = timestamp
 -- Exercise 03
 build :: [LogMessage] -> MessageTree
 build = foldl (flip insert) Leaf
+
+-- Exercise 04
+inOrder :: MessageTree -> [LogMessage]
+inOrder Leaf = []
+inOrder (Node left root right) = inOrder left ++ [root] ++ inOrder right
