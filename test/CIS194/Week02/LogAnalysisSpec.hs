@@ -53,10 +53,19 @@ spec = do
     it "sorts log messages by timestamp" $
       inOrder (Node (messageTree 1) (logMessage 2) (messageTree 3)) `shouldBe` [ (logMessage 1), (logMessage 2), (logMessage 3)]
 
+  describe "whatWentWrong" $ do
+    it "filter in severe log error messages" $
+      whatWentWrong [ logErrorMessage 50 3 "error"
+                    , logErrorMessage 49 1 "almost"
+                    , logErrorMessage 51 2 "fail"
+                    ] `shouldBe` [ "fail", "error" ]
+
 -- Helper functions
 logMessage :: TimeStamp -> LogMessage
 logMessage ts = LogMessage Info ts ""
-logMessage ts = LogMessage Info ts ""
+
+logErrorMessage :: Int -> TimeStamp -> String -> LogMessage
+logErrorMessage severity ts = LogMessage (Error severity) ts
 
 messageTree :: TimeStamp -> MessageTree
 messageTree ts = Node Leaf (logMessage ts) Leaf

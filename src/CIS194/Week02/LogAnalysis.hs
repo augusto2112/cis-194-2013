@@ -30,8 +30,8 @@ insert logMessage (Node left root right)
 
 -- AFC: Pattern match against Unknown
 timestamp :: LogMessage -> TimeStamp
-timestamp (LogMessage Info timestamp _)      = timestamp
-timestamp (LogMessage Warning timestamp _)   = timestamp
+timestamp (LogMessage Info      timestamp _) = timestamp
+timestamp (LogMessage Warning   timestamp _) = timestamp
 timestamp (LogMessage (Error _) timestamp _) = timestamp
 
 -- Exercise 03
@@ -42,3 +42,17 @@ build = foldl (flip insert) Leaf
 inOrder :: MessageTree -> [LogMessage]
 inOrder Leaf = []
 inOrder (Node left root right) = inOrder left ++ [root] ++ inOrder right
+
+-- Exercise 05
+whatWentWrong :: [LogMessage] -> [String]
+whatWentWrong [] = []
+whatWentWrong xs = map extractMessage $ filter isSevereError $ inOrder $ build xs
+
+-- AFC: It is necessary to pattern match against Unknown
+extractMessage :: LogMessage -> String
+extractMessage (Unknown message)        = message
+extractMessage (LogMessage _ _ message) = message
+
+isSevereError :: LogMessage -> Bool
+isSevereError (LogMessage (Error severity) _ _) = severity >= 50
+isSevereError _                                 = False
