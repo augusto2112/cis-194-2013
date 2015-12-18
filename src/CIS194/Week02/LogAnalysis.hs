@@ -13,4 +13,8 @@ parseNonErrorMessage messageType (ts:msg) =
   LogMessage messageType (read ts) (unwords msg)
 
 parseErrorMessage :: [String] -> LogMessage
-parseErrorMessage (code:ts:msg) = LogMessage (Error (read code)) (read ts) (unwords msg)
+parseErrorMessage (code:ts:msg) =
+  LogMessage (Error (read code)) (read ts) (unwords msg)
+
+parse :: String -> [LogMessage]
+parse logEntries = map parseMessage (lines logEntries)

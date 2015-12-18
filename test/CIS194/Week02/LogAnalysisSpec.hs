@@ -5,7 +5,7 @@ import CIS194.Week02.Log
 import Test.Hspec
 
 spec :: Spec
-spec =
+spec = do
   describe "parseMessage" $ do
     it "parses an info message" $
       parseMessage "I 4 Everything normal" `shouldBe` LogMessage Info 4 "Everything normal"
@@ -16,3 +16,9 @@ spec =
     it "parses unknown message" $
       parseMessage "This is not in the right format" `shouldBe` Unknown "This is not in the right format"
 
+  describe "parse" $ do
+    it "parses an info message" $
+      parse "I 4 Everything normal\nW 5 Flange is due for a check-up" `shouldBe`
+      [ LogMessage Info 4 "Everything normal"
+      , LogMessage Warning 5 "Flange is due for a check-up"
+      ]
