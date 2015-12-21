@@ -2,7 +2,6 @@ module CIS194.Week03.Golf where
 
 -- Exercise 01
 skips :: [a] -> [[a]]
-skips [] = []
 skips xs = map (flip nth xs) [1..(length xs)]
 
 nth :: Int -> [a] -> [a]
