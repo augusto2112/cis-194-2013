@@ -11,26 +11,29 @@ parseMessage logEntry = Unknown logEntry
 
 parseNonErrorMessage :: MessageType -> [String] -> LogMessage
 parseNonErrorMessage messageType (ts:msg) =
-  LogMessage messageType (read ts) (unwords msg)
+  LogMessage messageType timestamp message
+  where
+    timestamp = read ts
+    message   = unwords msg
 
 parseErrorMessage :: [String] -> LogMessage
-parseErrorMessage (code:ts:msg) =
-  LogMessage (Error (read code)) (read ts) (unwords msg)
+parseErrorMessage (code:ts:msg) = LogMessage (Error severity) timestamp message
+  where
+    severity  = read code
+    timestamp = read ts
+    message   = unwords msg
 
 parse :: String -> [LogMessage]
-parse logEntries = map parseMessage (lines logEntries)
+parse = map parseMessage . lines
 
 -- Exercise 02
 insert :: LogMessage -> MessageTree -> MessageTree
 insert (Unknown _) messageTree = messageTree
 insert logMessage Leaf = Node Leaf logMessage Leaf
-insert logMessage (Node left root right)
-  | timestamp logMessage <= timestamp root = Node (insert logMessage left) root right
-  | otherwise                              = Node left root (insert logMessage right)
-
--- AFC: Pattern match against Unknown
-timestamp :: LogMessage -> TimeStamp
-timestamp (LogMessage _ timestamp _) = timestamp
+insert logMessage@(LogMessage _ t1 _) (Node left root@(LogMessage _ t2 _) right)
+  | t1 <= t2  = Node (insert logMessage left) root right
+  | otherwise = Node left root (insert logMessage right)
+insert _ _ = undefined
 
 -- Exercise 03
 build :: [LogMessage] -> MessageTree
@@ -43,10 +46,8 @@ inOrder (Node left root right) = inOrder left ++ [root] ++ inOrder right
 
 -- Exercise 05
 whatWentWrong :: [LogMessage] -> [String]
-whatWentWrong [] = []
-whatWentWrong xs = map extractMessage $ filter isSevereError $ inOrder $ build xs
+whatWentWrong = map extractMessage . filter isSevereError . inOrder . build
 
--- AFC: It is necessary to pattern match against Unknown
 extractMessage :: LogMessage -> String
 extractMessage (Unknown message)        = message
 extractMessage (LogMessage _ _ message) = message
