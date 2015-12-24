@@ -15,3 +15,19 @@ localMaxima (x:y:z:zs)
   | y > x && y > z = y : localMaxima (y:z:zs)
   | otherwise      =     localMaxima (y:z:zs)
 localMaxima _ = []
+
+histogram :: [Int] -> String
+histogram xs = (unlines . lines') xs ++ "==========\n0123456789\n"
+
+lines' :: [Int] -> [String]
+lines' xs = map (line freq) range
+  where
+    freq  = frecuency xs
+    max   = maximum freq
+    range = [max, max - 1..1]
+
+line :: [Int] -> Int -> String
+line xs n = [if n <= x then '*' else ' ' | x <- xs]
+
+frecuency :: [Int] -> [Int]
+frecuency xs = map (\n -> (length . filter (== n)) xs)[0..9]
