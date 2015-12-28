@@ -19,6 +19,7 @@ library
                        CIS194.Week02.LogAnalysis
                        CIS194.Week02.Log
                        CIS194.Week03.Golf
+                       CIS194.Week04.HigherOrder
   build-depends:       base >= 4.7 && < 5
   default-language:    Haskell2010
 
