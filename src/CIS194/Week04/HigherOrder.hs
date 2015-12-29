@@ -4,6 +4,7 @@ module CIS194.Week04.HigherOrder where
 fun1 :: [Int] -> Int
 fun1 = product . map (\x -> x - 2) . filter even
 
+-- Exercise 02
 type Height = Int
 
 data Tree a = Leaf
@@ -27,8 +28,12 @@ height :: Tree a -> Int
 height Leaf = -1
 height (Node ht _ _ _) = ht
 
+-- Exercise 03
 xor :: [Bool] -> Bool
 xor = foldr xor' False
   where
     xor' :: Bool -> Bool -> Bool
     xor' a b = (a || b) && not (a && b)
+
+map' :: (a -> b) -> [a] -> [b]
+map' f = foldr (\x acc -> f x : acc) []

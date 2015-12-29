@@ -20,3 +20,8 @@ spec = do
     it "applies xor to a given list of boolean values" $ do
       xor [False, True, False]              `shouldBe` True
       xor [False, True, False, False, True] `shouldBe` False
+
+  describe "map'" $
+    it "applies a function to every element in a given list" $ do
+      map' (*2) [1, 2, 3]         `shouldBe` [2, 4, 6]
+      map' (subtract 2) [1, 2, 3] `shouldBe` [-1, 0, 1]
