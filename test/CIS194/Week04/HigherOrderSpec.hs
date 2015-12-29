@@ -25,3 +25,8 @@ spec = do
     it "applies a function to every element in a given list" $ do
       map' (*2) [1, 2, 3]         `shouldBe` [2, 4, 6]
       map' (subtract 2) [1, 2, 3] `shouldBe` [-1, 0, 1]
+
+  describe "sieveSundaram" $
+    it "finds all primes up to a specified integer" $ do
+      sieveSundaram 5  `shouldBe` [3,5,7,11]
+      sieveSundaram 10 `shouldBe` [3,5,7,11,13,17,19]

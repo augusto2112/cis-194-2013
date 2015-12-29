@@ -37,3 +37,11 @@ xor = foldr xor' False
 
 map' :: (a -> b) -> [a] -> [b]
 map' f = foldr (\x acc -> f x : acc) []
+
+-- Exercise 04
+sieveSundaram :: Integer -> [Integer]
+sieveSundaram n = map (\n -> 2*n + 1) remaining
+  where
+    bounds = [1..n]
+    remaining = filter (\x -> x `notElem` removable) bounds
+    removable = filter (<=n) $ [i+j+2*i*j | i <- bounds, j <- bounds, i <= j]
