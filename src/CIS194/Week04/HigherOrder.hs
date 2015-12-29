@@ -26,3 +26,9 @@ insert val (Node ht lt root rt)
 height :: Tree a -> Int
 height Leaf = -1
 height (Node ht _ _ _) = ht
+
+xor :: [Bool] -> Bool
+xor = foldr xor' False
+  where
+    xor' :: Bool -> Bool -> Bool
+    xor' a b = (a || b) && not (a && b)

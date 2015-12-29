@@ -15,3 +15,8 @@ spec = do
       foldTree ['A']      `shouldBe` Node 0 Leaf 'A' Leaf
       foldTree ['A'..'C'] `shouldBe`
         Node 1 (Node 0 Leaf 'B' Leaf) 'C' (Node 0 Leaf 'A' Leaf)
+
+  describe "xor" $
+    it "applies xor to a given list of boolean values" $ do
+      xor [False, True, False]              `shouldBe` True
+      xor [False, True, False, False, True] `shouldBe` False
