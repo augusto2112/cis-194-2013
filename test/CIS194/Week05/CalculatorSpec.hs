@@ -21,10 +21,19 @@ spec = do
       (reify $ mul (add (lit 2) (lit 3)) (lit 4)) `shouldBe`
         Mul (Add (Lit 2) (Lit 3)) (Lit 4)
 
-    it "works with integers" $
-      testInteger `shouldBe` Just (-7)
+    it "works with integers" $ do
+      testInteger "(3 * -4) + 5" `shouldBe` Just (-7)
+      testInteger "(3 * 4) + 5"  `shouldBe` Just 17
 
-testExp :: Expr a => Maybe a
-testExp = parseExp lit add mul "(3 * -4) + 5"
+    it "works with booleans" $ do
+      testBool "(3 * -4) + 5"  `shouldBe` Just True
+      testBool "(3 * -4) + -5" `shouldBe` Just False
 
-testInteger = testExp :: Maybe Integer
+testExp :: Expr a => String -> Maybe a
+testExp = parseExp lit add mul
+
+testInteger :: String -> Maybe Integer
+testInteger = testExp
+
+testBool :: String -> Maybe Bool
+testBool = testExp

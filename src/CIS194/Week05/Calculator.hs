@@ -33,3 +33,8 @@ instance Expr Integer where
   lit = id
   add = (+)
   mul = (*)
+
+instance Expr Bool where
+  lit n     = n > 0
+  add lt rt = lt || rt
+  mul lt rt = lt && rt
