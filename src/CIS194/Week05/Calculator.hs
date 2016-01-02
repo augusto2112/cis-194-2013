@@ -35,6 +35,6 @@ instance Expr Integer where
   mul = (*)
 
 instance Expr Bool where
-  lit n     = n > 0
-  add lt rt = lt || rt
-  mul lt rt = lt && rt
+  lit = (>0)
+  add = (||)
+  mul = (&&)
