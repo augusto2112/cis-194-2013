@@ -38,3 +38,10 @@ instance Expr Bool where
   lit = (>0)
   add = (||)
   mul = (&&)
+
+newtype MinMax = MinMax Integer deriving (Show, Eq)
+
+instance Expr MinMax where
+  lit = MinMax
+  add (MinMax lt) (MinMax rt) = MinMax (max lt rt)
+  mul (MinMax lt) (MinMax rt) = MinMax (min lt rt)

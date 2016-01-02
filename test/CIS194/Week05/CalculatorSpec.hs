@@ -17,7 +17,7 @@ spec = do
       evalStr "(2+3)*"  `shouldBe` Nothing
 
   describe "Expr" $ do
-    it "evaluates an expression" $
+    it "evaluates a given expression" $
       (reify $ mul (add (lit 2) (lit 3)) (lit 4)) `shouldBe`
         Mul (Add (Lit 2) (Lit 3)) (Lit 4)
 
@@ -29,6 +29,10 @@ spec = do
       testBool "(3 * -4) + 5"  `shouldBe` Just True
       testBool "(3 * -4) + -5" `shouldBe` Just False
 
+    it "works with MinMax" $ do
+      testMM "(3 * -4) + 5"  `shouldBe` Just (MinMax 5)
+      testMM "(3 * 1) + -5"  `shouldBe` Just (MinMax 1)
+
 testExp :: Expr a => String -> Maybe a
 testExp = parseExp lit add mul
 
@@ -37,3 +41,6 @@ testInteger = testExp
 
 testBool :: String -> Maybe Bool
 testBool = testExp
+
+testMM :: String -> Maybe MinMax
+testMM = testExp
