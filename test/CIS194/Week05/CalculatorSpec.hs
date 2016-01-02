@@ -30,8 +30,12 @@ spec = do
       testBool "(3 * -4) + -5" `shouldBe` Just False
 
     it "works with MinMax" $ do
-      testMM "(3 * -4) + 5"  `shouldBe` Just (MinMax 5)
-      testMM "(3 * 1) + -5"  `shouldBe` Just (MinMax 1)
+      testMinMax "(3 * -4) + 5"  `shouldBe` Just (MinMax 5)
+      testMinMax "(3 * 1) + -5"  `shouldBe` Just (MinMax 1)
+
+    it "works with Mod7" $ do
+      testMod7 "(3 * -4) + 8"  `shouldBe` Just (Mod7 3)
+      testMod7 "(3 * 1) + -5"  `shouldBe` Just (Mod7 5)
 
 testExp :: Expr a => String -> Maybe a
 testExp = parseExp lit add mul
@@ -42,5 +46,8 @@ testInteger = testExp
 testBool :: String -> Maybe Bool
 testBool = testExp
 
-testMM :: String -> Maybe MinMax
-testMM = testExp
+testMinMax :: String -> Maybe MinMax
+testMinMax = testExp
+
+testMod7 :: String -> Maybe Mod7
+testMod7 = testExp

@@ -29,6 +29,7 @@ instance Expr ExprT where
 reify :: ExprT -> ExprT
 reify = id
 
+-- Exercise 04
 instance Expr Integer where
   lit = id
   add = (+)
@@ -45,3 +46,10 @@ instance Expr MinMax where
   lit = MinMax
   add (MinMax lt) (MinMax rt) = MinMax (max lt rt)
   mul (MinMax lt) (MinMax rt) = MinMax (min lt rt)
+
+newtype Mod7 = Mod7 Integer deriving (Show, Eq)
+
+instance Expr Mod7 where
+  lit = Mod7
+  add (Mod7 lt) (Mod7 rt) = Mod7 ((lt + rt) `mod` 7)
+  mul (Mod7 lt) (Mod7 rt) = Mod7 ((lt * rt) `mod` 7)
