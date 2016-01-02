@@ -28,3 +28,8 @@ instance Expr ExprT where
 
 reify :: ExprT -> ExprT
 reify = id
+
+instance Expr Integer where
+  lit = id
+  add = (+)
+  mul = (*)
