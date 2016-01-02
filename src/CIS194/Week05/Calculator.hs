@@ -15,3 +15,16 @@ evalStr str = case parseExp Lit Add Mul str of
                    Just exprT -> Just (eval exprT)
                    Nothing    -> Nothing
 
+-- Exercise 03
+class Expr a where
+  lit :: Integer -> a
+  add :: a -> a -> a
+  mul :: a -> a -> a
+
+instance Expr ExprT where
+  lit = Lit
+  add = Add
+  mul = Mul
+
+reify :: ExprT -> ExprT
+reify = id
