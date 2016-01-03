@@ -3,6 +3,7 @@ module CIS194.Week05.CalculatorSpec where
 import CIS194.Week05.Calculator
 import CIS194.Week05.ExprT
 import CIS194.Week05.Parser
+import qualified CIS194.Week05.StackVM as S
 import Test.Hspec
 
 spec :: Spec
@@ -36,6 +37,20 @@ spec = do
     it "works with Mod7" $ do
       testMod7 "(3 * -4) + 8"  `shouldBe` Just (Mod7 3)
       testMod7 "(3 * 1) + -5"  `shouldBe` Just (Mod7 5)
+
+    it "works with StackVM" $ do
+      compile "(3 * -4) + 8"  `shouldBe` Just [ S.PushI 3
+                                              , S.PushI (-4)
+                                              , S.Mul
+                                              , S.PushI 8
+                                              , S.Add
+                                              ]
+      compile "(3 + 1) * -5"  `shouldBe` Just [ S.PushI 3
+                                              , S.PushI 1
+                                              , S.Add
+                                              , S.PushI (-5)
+                                              , S.Mul
+                                              ]
 
 testExp :: Expr a => String -> Maybe a
 testExp = parseExp lit add mul

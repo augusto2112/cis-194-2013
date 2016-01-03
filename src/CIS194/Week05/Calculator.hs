@@ -1,7 +1,10 @@
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+
 module CIS194.Week05.Calculator where
 
 import CIS194.Week05.ExprT
 import CIS194.Week05.Parser
+import qualified CIS194.Week05.StackVM as S
 
 -- Exercise 01
 eval :: ExprT -> Integer
@@ -53,3 +56,12 @@ instance Expr Mod7 where
   lit = Mod7
   add (Mod7 lt) (Mod7 rt) = Mod7 ((lt + rt) `mod` 7)
   mul (Mod7 lt) (Mod7 rt) = Mod7 ((lt * rt) `mod` 7)
+
+-- Exercise 05
+instance Expr S.Program where
+  lit n = [S.PushI n]
+  add lt rt = lt ++ rt ++ [S.Add]
+  mul lt rt = lt ++ rt ++ [S.Mul]
+
+compile :: String -> Maybe S.Program
+compile = parseExp lit add mul
