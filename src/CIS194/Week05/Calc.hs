@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 
-module CIS194.Week05.Calculator where
+module CIS194.Week05.Calc where
 
 import CIS194.Week05.ExprT
 import CIS194.Week05.Parser

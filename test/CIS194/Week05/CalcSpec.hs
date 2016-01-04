@@ -1,6 +1,6 @@
-module CIS194.Week05.CalculatorSpec where
+module CIS194.Week05.CalcSpec where
 
-import CIS194.Week05.Calculator
+import CIS194.Week05.Calc
 import CIS194.Week05.ExprT
 import CIS194.Week05.Parser
 import qualified CIS194.Week05.StackVM as S

@@ -20,7 +20,7 @@ library
                        CIS194.Week02.Log
                        CIS194.Week03.Golf
                        CIS194.Week04.HigherOrder
-                       CIS194.Week05.Calculator
+                       CIS194.Week05.Calc
                        CIS194.Week05.ExprT
                        CIS194.Week05.Parser
                        CIS194.Week05.StackVM
