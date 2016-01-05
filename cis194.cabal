@@ -24,6 +24,7 @@ library
                        CIS194.Week05.ExprT
                        CIS194.Week05.Parser
                        CIS194.Week05.StackVM
+                       CIS194.Week06.Fibonacci
   build-depends:       base >= 4.7 && < 5
   default-language:    Haskell2010
 
