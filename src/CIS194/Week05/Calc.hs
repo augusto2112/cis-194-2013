@@ -14,9 +14,10 @@ eval (Mul lt rt) = eval lt * eval rt
 
 -- Exercise 02
 evalStr :: String -> Maybe Integer
-evalStr str = case parseExp Lit Add Mul str of
-                   Just exprT -> Just (eval exprT)
-                   Nothing    -> Nothing
+evalStr str =
+  case parseExp Lit Add Mul str of
+    Just exprT -> Just (eval exprT)
+    Nothing    -> Nothing
 
 -- Exercise 03
 class Expr a where
@@ -53,7 +54,7 @@ instance Expr MinMax where
 newtype Mod7 = Mod7 Integer deriving (Show, Eq)
 
 instance Expr Mod7 where
-  lit = Mod7
+  lit n = Mod7 (n `mod` 7)
   add (Mod7 lt) (Mod7 rt) = Mod7 ((lt + rt) `mod` 7)
   mul (Mod7 lt) (Mod7 rt) = Mod7 ((lt * rt) `mod` 7)
 
