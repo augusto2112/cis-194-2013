@@ -2,6 +2,7 @@ module CIS194.Week04.HigherOrderSpec where
 
 import CIS194.Week04.HigherOrder
 import Test.Hspec
+import Test.QuickCheck
 
 spec :: Spec
 spec = do
@@ -21,10 +22,9 @@ spec = do
       xor [False, True, False]              `shouldBe` True
       xor [False, True, False, False, True] `shouldBe` False
 
-  describe "map'" $
-    it "applies a function to every element in a given list" $ do
-      map' (*2) [1, 2, 3]         `shouldBe` [2, 4, 6]
-      map' (subtract 2) [1, 2, 3] `shouldBe` [-1, 0, 1]
+  describe "map'" $ do
+    it "behaves like an standard map" $ property $ \xs -> do
+        (map' (+1) xs :: [Int]) == map (+1) xs
 
   describe "sieveSundaram" $
     it "finds all primes up to a specified integer" $ do
