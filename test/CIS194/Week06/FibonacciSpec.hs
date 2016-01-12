@@ -37,3 +37,7 @@ spec = do
   describe "nats" $
     it "generates an infinite list of natural numbers" $
       show nats `shouldBe` show [0..19]
+
+  describe "ruler" $
+    it "generates a ruler" $
+      show ruler `shouldBe` show [0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2]
