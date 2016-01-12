@@ -32,3 +32,7 @@ streamMap f (Cons x xs) = Cons (f x) (streamMap f xs)
 
 streamFromSeed :: (a -> a) -> a -> Stream a
 streamFromSeed f x = Cons x (streamFromSeed f (f x))
+
+-- Exercise 05
+nats :: Stream Integer
+nats = streamFromSeed (+1) 0

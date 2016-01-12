@@ -31,5 +31,9 @@ spec = do
 
   describe "streamFromSeed" $
     it "generates a stream form a given seed" $
-      let stream = streamFromSeed (+1) 0
-      in show stream `shouldBe` show [0..19]
+      let stream = streamFromSeed (+2) 2
+      in show stream `shouldBe` show [x * 2 | x <- [1..20]]
+
+  describe "nats" $
+    it "generates an infinite list of natural numbers" $
+      show nats `shouldBe` show [0..19]
