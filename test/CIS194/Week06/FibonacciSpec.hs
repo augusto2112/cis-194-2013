@@ -23,3 +23,8 @@ spec = do
     it "conveniently prints the first 20 elements in a stream" $
       let stream = streamRepeat 10
       in show stream `shouldBe` (show [10 | _ <- [1..20]])
+
+  describe "streamMap" $
+    it "maps a function to the elements in a stream" $
+      let stream = streamRepeat 10
+      in (show $ streamMap (subtract 2) stream) `shouldBe` (show [8 | _ <- [1..20]])
