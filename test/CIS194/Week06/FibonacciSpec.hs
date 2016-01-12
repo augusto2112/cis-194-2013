@@ -26,5 +26,10 @@ spec = do
 
   describe "streamMap" $
     it "maps a function to the elements in a stream" $
-      let stream = streamRepeat 10
-      in (show $ streamMap (subtract 2) stream) `shouldBe` (show [8 | _ <- [1..20]])
+      let stream = streamRepeat 6
+      in (show $ streamMap (+2) stream) `shouldBe` (show [8 | _ <- [1..20]])
+
+  describe "streamFromSeed" $
+    it "generates a stream form a given seed" $
+      let stream = streamFromSeed (+1) 0
+      in show stream `shouldBe` show [0..19]
