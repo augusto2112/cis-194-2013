@@ -1,21 +1,21 @@
 module CIS194.Week02.Log where
 
-import Control.Applicative
+import           Control.Applicative
 
 data MessageType = Info
                  | Warning
                  | Error Int
-  deriving (Show, Eq)
+                 deriving (Show, Eq)
 
 type TimeStamp = Int
 
 data LogMessage = LogMessage MessageType TimeStamp String
                 | Unknown String
-  deriving (Show, Eq)
+                deriving (Show, Eq)
 
 data MessageTree = Leaf
                  | Node MessageTree LogMessage MessageTree
-  deriving (Show, Eq)
+                 deriving (Show, Eq)
 
 -- | @testParse p n f@ tests the log file parser @p@ by running it
 --   on the first @n@ lines of file @f@.

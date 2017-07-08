@@ -1,8 +1,8 @@
 module CIS194.Week04.HigherOrderSpec where
 
-import CIS194.Week04.HigherOrder
-import Test.Hspec
-import Test.QuickCheck
+import           CIS194.Week04.HigherOrder
+import           Test.Hspec
+import           Test.QuickCheck
 
 spec :: Spec
 spec = do

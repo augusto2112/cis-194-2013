@@ -32,6 +32,13 @@ test-suite cis194-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
+  other-modules:       CIS194.Week01.HanoiSpec
+                     , CIS194.Week01.LuhnSpec
+                     , CIS194.Week02.LogAnalysisSpec
+                     , CIS194.Week03.GolfSpec
+                     , CIS194.Week04.HigherOrderSpec
+                     , CIS194.Week05.CalcSpec
+                     , CIS194.Week06.FibonacciSpec
   build-depends:       base
                      , cis194
                      , hspec
