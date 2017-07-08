@@ -1,11 +1,10 @@
-# CIS 194: Introduction to Haskell
+# Introduction to Haskell
 
 [![Build Status](https://travis-ci.org/acamino/cis-194-2013.svg)](https://travis-ci.org/acamino/cis-194-2013)
 
 Memories of the course **CIS 194 - Introduction to Haskell** offered for free by
 the University of Pennsylvania. This course explore the fundamental concepts of
-functional programming through the Haskell language. I can't recommend this
-course enough.
+functional programming. I can't recommend this course enough.
 
 If you want to know more about functional programming, please take a look at
 [CIS 194 - Introduction to Haskell](http://www.cis.upenn.edu/~cis194/spring13/lectures.html).
