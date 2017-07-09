@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://dl.dropboxusercontent.com/s/1lj59ly4qxc8j7b/connecting-dots.png" width="400px" />
+</p>
+
 # Introduction to Haskell
 
 [![Build Status](https://travis-ci.org/acamino/cis-194-2013.svg)](https://travis-ci.org/acamino/cis-194-2013)
