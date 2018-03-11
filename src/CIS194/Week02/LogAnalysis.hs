@@ -1,77 +1,106 @@
+{-# OPTIONS_GHC -Wall #-}
 module CIS194.Week02.LogAnalysis where
 
 import           CIS194.Week02.Log
 
--- | Exercise 01
+readHead :: [String] -> Int
+readHead = read . head
 
-parseMessage
-  :: String
-  -> LogMessage
-parseMessage ('I':xs) = parseNonErrorMessage Info (words xs)
-parseMessage ('W':xs) = parseNonErrorMessage Warning (words xs)
-parseMessage ('E':xs) = parseErrorMessage (words xs)
-parseMessage logEntry = Unknown logEntry
+concatenateTail :: [String] -> String
+concatenateTail = unwords . tail
 
-parseNonErrorMessage
-  :: MessageType
-  -> [String]
-  -> LogMessage
-parseNonErrorMessage messageType (ts:msg) =
-  LogMessage messageType timestamp message
-  where
-    timestamp = read ts
-    message   = unwords msg
+parseMessage :: String -> LogMessage
+parseMessage (x:xs)
+    | x == 'E' && (length parts) >= 2   = LogMessage (Error (readHead  parts))
+                                                ((readHead . tail) parts)
+                                                (unwords (drop 2 parts))
+    | x == 'W' && (length parts) >= 3   = LogMessage Warning (readHead parts) (concatenateTail parts)
+    | x == 'I' && (length parts) >= 2   = LogMessage Info (readHead parts) (concatenateTail parts)
+    | otherwise             = Unknown (x:xs)
+    where parts = words xs
+parseMessage xs = Unknown xs
 
-parseErrorMessage
-  :: [String]
-  -> LogMessage
-parseErrorMessage (code:ts:msg) =
-  LogMessage (Error severity) timestamp message
-  where
-    severity  = read code
-    timestamp = read ts
-    message   = unwords msg
+
+parseLines :: [String] -> [LogMessage]
+parseLines []       = parseMessage [] : []
+parseLines (x:[])   = parseMessage x : []
+parseLines (x:xs)   = parseMessage x : parseLines xs
 
 parse :: String -> [LogMessage]
-parse = fmap parseMessage . lines
+parse xs =  parseLines (lines xs)
 
+insert :: LogMessage -> MessageTree -> MessageTree
+insert (Unknown _) tree    = tree
+insert msg Leaf            = Node Leaf msg Leaf
+insert msg@(LogMessage _ stamp _) (Node leftTree currentMessage@(LogMessage _ currentStamp _) rightTree)
+    | stamp > currentStamp = Node leftTree currentMessage (insert msg rightTree)
+    | otherwise            = Node (insert msg leftTree) currentMessage  rightTree
+insert _ tree              = tree -- show throw an exception here, idk how to in Haskell yet sooo..
 
--- | Exercise 02
-
-insert
-  :: LogMessage
-  -> MessageTree
-  -> MessageTree
-insert (Unknown _) messageTree = messageTree
-insert logMessage Leaf = Node Leaf logMessage Leaf
-insert logMessage@(LogMessage _ t1 _) (Node left root@(LogMessage _ t2 _) right)
-  | t1 <= t2  = Node (insert logMessage left) root right
-  | otherwise = Node left root (insert logMessage right)
-insert _ _ = undefined
-
-
--- | Exercise 03
+buildFromTree :: MessageTree -> [LogMessage]  -> MessageTree
+buildFromTree tree []   = tree
+buildFromTree tree (x:xs) = buildFromTree (insert x tree) xs
 
 build :: [LogMessage] -> MessageTree
-build = foldl (flip insert) Leaf
-
-
--- | Exercise 04
+build = buildFromTree Leaf
 
 inOrder :: MessageTree -> [LogMessage]
-inOrder Leaf                   = []
-inOrder (Node left root right) = inOrder left ++ [root] ++ inOrder right
+inOrder Leaf = []
+inOrder (Node leftTree message rightTree) =
+    (inOrder leftTree) ++ [message] ++ (inOrder rightTree)
 
+orderMessages :: [LogMessage] -> [LogMessage]
+orderMessages = inOrder . build
 
--- Exercise 05
+moreThan :: Int -> LogMessage -> Bool
+moreThan min_severity (LogMessage (Error severity) _ _) = severity >= min_severity
+moreThan _ _ = False
 
-whatWentWrong :: [LogMessage] -> [String]
-whatWentWrong = fmap extractMessage . filter isSevereError . inOrder . build
+moreThan50 :: LogMessage -> Bool
+moreThan50 = moreThan 50
+
+filterMessages :: [LogMessage] -> [LogMessage]
+filterMessages = filter moreThan50
+
+onlyErrors :: [LogMessage] -> [LogMessage]
+onlyErrors [] = []
+onlyErrors (x:xs) =
+    case x of
+        msg@(LogMessage (Error _) _ _)  -> msg : onlyErrors xs
+        _                               -> onlyErrors xs
 
 extractMessage :: LogMessage -> String
-extractMessage (Unknown message)        = message
-extractMessage (LogMessage _ _ message) = message
+extractMessage (LogMessage _ _ msg) = msg
+extractMessage _ = ""
 
-isSevereError :: LogMessage -> Bool
-isSevereError (LogMessage (Error severity) _ _) = severity >= 50
-isSevereError _                                 = False
+extractMessages :: [LogMessage] -> [String]
+extractMessages = map extractMessage
+
+whatWentWrong :: [LogMessage] -> [String]
+whatWentWrong = extractMessages . filterMessages . onlyErrors . orderMessages
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

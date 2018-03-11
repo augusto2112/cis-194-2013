@@ -1,32 +1,34 @@
+{-# OPTIONS_GHC -Wall #-}
 module CIS194.Week01.Luhn where
 
--- | Exercise 01
+toDigitsRev :: Integer -> [Integer]
+toDigitsRev n
+    | n <= 0    = []
+    | n < 10    = [n]
+    | otherwise = n `mod` 10 : toDigitsRev (n `quot` 10)
 
-toDigits :: Int -> [Int]
+toDigits :: Integer -> [Integer]
 toDigits = reverse . toDigitsRev
 
+doubleEveryOtherInOrder :: [Integer] -> [Integer]
+doubleEveryOtherInOrder []          = []
+doubleEveryOtherInOrder [x]         = [x]
+doubleEveryOtherInOrder (x:(y:zs))  = x : (y*2) : doubleEveryOtherInOrder zs
 
-toDigitsRev :: Int -> [Int]
-toDigitsRev n
-  | n <= 0    = []
-  | otherwise = mod n 10 : toDigitsRev (div n 10)
+doubleEveryOther :: [Integer] -> [Integer]
+doubleEveryOther = reverse . doubleEveryOtherInOrder . reverse
+
+sumNumber  :: Integer -> Integer
+sumNumber = sum . toDigits
+
+sumDigits :: [Integer] -> Integer
+sumDigits = sum . map sumNumber
+
+validate :: Integer -> Bool
+validate n = ((sumDigits . doubleEveryOther . toDigits) n) `mod` 10 == 0
+
+type Peg = String
+type Move = (Peg, Peg)
 
 
--- | Exercise 02
 
-doubleEveryOther :: [Int] -> [Int]
-doubleEveryOther []       = []
-doubleEveryOther (x:[])   = [x]
-doubleEveryOther (x:y:xs) = x*2 : y : doubleEveryOther xs
-
-
--- | Exercise 03
-
-sumDigits :: [Int] -> Int
-sumDigits = sum . map (sum . toDigits)
-
-
--- | Exercise 04
-
-validate :: Int -> Bool
-validate n = mod (sumDigits . doubleEveryOther . toDigits $ n) 10 == 0
