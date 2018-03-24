@@ -1,80 +1,107 @@
-{-# LANGUAGE FlexibleInstances    #-}
 {-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances    #-}
 
-module CIS194.Week05.Calc where
+-- module CIS194.Week05.Calc where
 
-import           CIS194.Week05.ExprT
-import           CIS194.Week05.Parser
-import qualified CIS194.Week05.StackVM as S
-
--- | Exercise 01
+import ExprT
+import Parser
+import qualified StackVM as S
 
 eval :: ExprT -> Integer
-eval (Lit n)     = n
-eval (Add lt rt) = eval lt + eval rt
-eval (Mul lt rt) = eval lt * eval rt
-
-
--- | Exercise 02
+eval (Lit val) = val
+eval (Add exp1 exp2) = (eval exp1) + (eval exp2)
+eval (Mul exp1 exp2) = (eval exp1) * (eval exp2)
 
 evalStr :: String -> Maybe Integer
-evalStr str =
-  case parseExp Lit Add Mul str of
-    Just exprT -> Just (eval exprT)
-    Nothing    -> Nothing
+evalStr s =
+  case parseExp Lit Add Mul s of
+    Nothing -> Nothing
+    (Just expr) -> Just $ eval expr
 
-
--- | Exercise 03
-
-class Expr a where
-  lit :: Integer -> a
-  add :: a -> a -> a
-  mul :: a -> a -> a
+class Expr exp where
+  lit :: Integer -> exp
+  add :: exp -> exp -> exp
+  mul :: exp -> exp -> exp
 
 instance Expr ExprT where
   lit = Lit
   add = Add
   mul = Mul
 
-reify :: ExprT -> ExprT
-reify = id
-
-
--- | Exercise 04
-
 instance Expr Integer where
-  lit = id
-  add = (+)
-  mul = (*)
+  lit exp = exp
+  add exp1 exp2 = exp1 + exp2
+  mul exp1 exp2 = exp1 * exp2
 
 instance Expr Bool where
-  lit = (>0)
-  add = (||)
-  mul = (&&)
+  lit exp = exp > 0
+  add exp1 exp2 = exp1 || exp2
+  mul exp1 exp2 = exp1 && exp2
 
 newtype MinMax = MinMax Integer
-                 deriving (Show, Eq)
+                deriving (Show, Eq)
 
 instance Expr MinMax where
-  lit = MinMax
-  add (MinMax lt) (MinMax rt) = MinMax (max lt rt)
-  mul (MinMax lt) (MinMax rt) = MinMax (min lt rt)
+  lit exp = MinMax exp
+  add (MinMax exp1) (MinMax exp2) = MinMax $ max exp1 exp2
+  mul (MinMax exp1) (MinMax exp2) = MinMax $ min exp1 exp2
 
-newtype Mod7 = Mod7 Integer
-               deriving (Show, Eq)
+newtype Mod7 = Mod7 Integer deriving (Eq, Show)
+
 
 instance Expr Mod7 where
-  lit n = Mod7 (n `mod` 7)
-  add (Mod7 lt) (Mod7 rt) = Mod7 ((lt + rt) `mod` 7)
-  mul (Mod7 lt) (Mod7 rt) = Mod7 ((lt * rt) `mod` 7)
+  lit exp = Mod7 $ exp `mod` 7
+  add (Mod7 exp1) (Mod7 exp2) = lit $ exp1 + exp1
+  mul (Mod7 exp1) (Mod7 exp2) = lit $ exp1 * exp1
 
+testExp :: Expr a => Maybe a
+testExp = parseExp lit add mul "3 + 5"
 
--- | Exercise 05
+testInteger = testExp :: Maybe Integer
+testBool = testExp :: Maybe Bool
+testMM = testExp :: Maybe MinMax
+testSat = testExp :: Maybe Mod7
 
 instance Expr S.Program where
-  lit n = [S.PushI n]
-  add lt rt = lt ++ rt ++ [S.Add]
-  mul lt rt = lt ++ rt ++ [S.Mul]
+  lit num = (S.PushI num) : []
+  add exp1 exp2 = exp1 ++ exp2 ++ [S.Add]
+  mul exp1 exp2 = exp1 ++ exp2 ++ [S.Mul]
+
 
 compile :: String -> Maybe S.Program
 compile = parseExp lit add mul
+
+b = compile "3 + 4 * 5"
+
+exec :: Maybe S.Program -> Either String S.StackVal
+exec Nothing = Left "Nothing"
+exec (Just b) = S.stackVM b
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

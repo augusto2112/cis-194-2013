@@ -1,4 +1,4 @@
-module CIS194.Week05.ExprT where
+module ExprT where
 
 data ExprT = Lit Integer
            | Add ExprT ExprT
