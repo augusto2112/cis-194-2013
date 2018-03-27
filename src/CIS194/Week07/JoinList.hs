@@ -19,9 +19,9 @@ tag (Append m _ _) = m
 indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
 indexJ _ Empty = Nothing
 indexJ index (Single m a)
-    | index == m = Just a
+    | index == 0 = Just a
     | otherwise = Nothing
 indexJ index (Append m left right)
-    | index < m = indexJ index left
-    | index > m = indexJ (right
-    | otherwise = Nothing
+    | index < half = indexJ index left
+    | index >= half = indexJ (index - half) right
+    where half = ((getSize . size) m) / 2
