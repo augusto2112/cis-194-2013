@@ -59,4 +59,4 @@ interleaveStreams :: Stream a -> Stream a -> Stream a
 interleaveStreams (Cons x xs) (Cons y ys) = (Cons x (Cons y (interleaveStreams xs ys)))
 
 ruler :: Stream Integer
-ruler = streamMap (\x -> 2 * x ^ 2) 
+ruler = streamMap (\x -> 2 ^ x) nats
