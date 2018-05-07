@@ -8,32 +8,43 @@ import Data.Monoid
 import Data.Tree
 
 glCons :: Employee -> GuestList -> GuestList
-glCons emp (GL employees fun) = GL (emp:employees) (fun + empFun emp)
+glCons e (GL es fun) = GL (e:es) (fun + (empFun e))
 
 instance Monoid GuestList where
     mempty = GL [] 0
-    mappend (GL emps1 fun1) (GL emps2 fun2) = GL (emps1 <> emps2)  (fun1 + fun2)
+    mappend (GL a1 f1) (GL a2 f2) = GL (a1 <> a2) (f1 + f2) 
 
 moreFun :: GuestList -> GuestList -> GuestList
-moreFun a@(GL _ fun1) b@ (GL _ fun2) = if fun1 >= fun2 then a else b
+moreFun = max
 
 treeFold :: (a -> [b] -> b) -> Tree a -> b
-treeFold f t = f (rootLabel t) (map (treeFold f) (subForest t))
+treeFold f (Node a cs) = f a (map (treeFold f) cs)
 
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel boss [] = (glCons boss mempty, mempty)
-nextLevel boss ((withSubBoss, withoutSubBoss):[]) = (glCons boss withoutSubBoss, withSubBoss)
-nextLevel boss ((withSubBoss, withoutSubBoss):xs) = let (withBoss, withoutBoss) =  nextLevel boss xs in
-                        (withoutSubBoss <> withBoss,  withSubBoss <> withoutBoss)
+nextLevel boss gls = (glCons boss (mconcat withoutSubBoss), (mconcat (map (uncurry moreFun) gls)))
+    where (_, withoutSubBoss) = unzip gls
 
 maxFun :: Tree Employee -> GuestList
-maxFun t = let (list1, list2) = (treeFold nextLevel t) in moreFun list1 list2
+maxFun = uncurry moreFun . treeFold nextLevel 
 
-readGuestList :: String -> Tree Employee
-readGuestList = read
+printFun :: GuestList -> String
+printFun (GL es fs) = "Total fun: " ++ show fs ++ "\n" ++ unlines (map empName es)
 
-formatGuestList :: GuestList -> String
-formatGuestList (GL emps fun) = "Total fun: " ++ show fun ++ "\n" ++ (foldr (\emp x -> x ++ (empName emp) ++ "\n") "" emps)
+main :: IO ()
+main = (readFile "company.txt" >>= (\c -> putStr (printFun (maxFun (read c)))))
 
-main :: IO()
-main = readFile "company.txt" >>= (\f -> return $ formatGuestList $ maxFun $ readGuestList f) >>= putStr
+
+-- instance Functor ((,) e) where
+--     fmap f (x,y) = (x, (f y))
+
+data Pair a = Pair a a
+
+instance Functor Pair where
+    fmap f (Pair x y) = Pair (f x) (f y)
+
+data ITree a = ILeaf (Int -> a) 
+             | INode [ITree a]
+
+instance Functor ITree where
+    fmap f (ILeaf g) = ILeaf (f . g)
+    fmap f (INode xs) = INode (fmap (fmap f) xs)
